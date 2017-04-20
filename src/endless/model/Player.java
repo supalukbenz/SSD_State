@@ -6,7 +6,7 @@ public class Player {
 	public static final int WIDTH = 30;
 	public static final int NORMAL_HEIGHT = 60;
 	public static final int CRAWL_HEIGHT = 30;
-	
+
 	private int x;
 	private int y;
 	private int vY;
@@ -14,6 +14,10 @@ public class Player {
 	private int height;
 
 	// TODO: Add variables you need.
+	private boolean crawling;
+	private long jumpTime;
+	private int jumpY;
+	private int jumpCount;
 
 	public Player(int x, int y) {
 		this.x = x;
@@ -57,21 +61,43 @@ public class Player {
 
 	public void jumpPressed() {
 		// TODO: Complete this
-		System.out.println("Jump Pressed");
+		if (jumpCount < 2 && !crawling) {
+			jumpCount++;
+			jumpTime = System.currentTimeMillis();
+			jumpY = y;
+			System.out.println("Jump Pressed");
+		}
 	}
 
 	public void crawlPressed() {
 		// TODO: Complete this
-		System.out.println("Crawl Pressed");
+		if (jumpCount == 0) {
+			crawling = true;
+			height = CRAWL_HEIGHT;
+			System.out.println("Crawl Pressed");
+		}
 	}
 
 	public void crawlReleased() {
 		// TODO: Complete this
-		System.out.println("Crawl Released");
+		if (crawling) {
+			crawling = false;
+			height = NORMAL_HEIGHT;
+			System.out.println("Crawl Released");
+		}
 	}
 
 	public void update() {
 		// TODO: Complete this
+		if (jumpCount > 0) {
+			float t = (System.currentTimeMillis() - jumpTime) / 1000.0f;
+			y = (int) (jumpY + JUMP_SPEED * t + 0.5f * Game.GRAVITY * t * t);
+			System.out.println("Jumping");
+			if (y <= 0) {
+				y = 0;
+				jumpCount = 0;
+			}
+		}
 	}
 
 }
