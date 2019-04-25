@@ -95,14 +95,14 @@ public class Player {
 	}
 
 	public void crawlReleased() {
-		// TODO: Complete this
+		// TODO: Fix this
 		if (crawling) {
 			stopCrawling();
 		}
 	}
 
 	public void update() {
-		// TODO: Complete this
+		// TODO: Fix this
 		if (jumpCount > 0) {
 			float t = (System.currentTimeMillis() - jumpTime) / 1000.0f;
 			y = (int) (jumpY + JUMP_SPEED * t + 0.5f * Game.GRAVITY * t * t);
