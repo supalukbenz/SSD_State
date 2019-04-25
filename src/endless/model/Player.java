@@ -58,32 +58,46 @@ public class Player {
 	public void setvY(int vY) {
 		this.vY = vY;
 	}
+	
+	public void jump() {
+		jumpCount++;
+		jumpTime = System.currentTimeMillis();
+		jumpY = y;
+	}
+
+	public void crawl() {
+		crawling = true;
+		height = CRAWL_HEIGHT;
+	}
+
+	public void stopCrawling() {
+		crawling = false;
+		height = NORMAL_HEIGHT;
+	}
+
+	public void enterGround() {
+		y = 0;
+		jumpCount = 0;
+	}
 
 	public void jumpPressed() {
-		// TODO: Complete this
+		// TODO: Fix this
 		if (jumpCount < 2 && !crawling) {
-			jumpCount++;
-			jumpTime = System.currentTimeMillis();
-			jumpY = y;
-			System.out.println("Jump Pressed");
+			jump();
 		}
 	}
 
 	public void crawlPressed() {
-		// TODO: Complete this
+		// TODO: Fix this
 		if (jumpCount == 0) {
-			crawling = true;
-			height = CRAWL_HEIGHT;
-			System.out.println("Crawl Pressed");
+			crawl();
 		}
 	}
 
 	public void crawlReleased() {
 		// TODO: Complete this
 		if (crawling) {
-			crawling = false;
-			height = NORMAL_HEIGHT;
-			System.out.println("Crawl Released");
+			stopCrawling();
 		}
 	}
 
@@ -92,10 +106,8 @@ public class Player {
 		if (jumpCount > 0) {
 			float t = (System.currentTimeMillis() - jumpTime) / 1000.0f;
 			y = (int) (jumpY + JUMP_SPEED * t + 0.5f * Game.GRAVITY * t * t);
-			System.out.println("Jumping");
 			if (y <= 0) {
-				y = 0;
-				jumpCount = 0;
+				enterGround();
 			}
 		}
 	}
