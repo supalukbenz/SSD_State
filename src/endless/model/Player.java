@@ -1,5 +1,8 @@
 package endless.model;
 
+import endless.State;
+import endless.StateIdle;
+
 public class Player {
 
 	public static final int JUMP_SPEED = 300;
@@ -13,7 +16,7 @@ public class Player {
 	private int width;
 	private int height;
 
-	// TODO: Add variables you need.
+	private State state;
 	private boolean crawling;
 	private long jumpTime;
 	private int jumpY;
@@ -24,7 +27,7 @@ public class Player {
 		this.y = y;
 		this.width = WIDTH;
 		this.height = NORMAL_HEIGHT;
-		// TODO: Initialize variables you need
+		this.state = new StateIdle(this);
 	}
 
 	public int getX() {
@@ -81,35 +84,29 @@ public class Player {
 	}
 
 	public void jumpPressed() {
-		// TODO: Fix this
-		if (jumpCount < 2 && !crawling) {
-			jump();
-		}
+		state.jumpPressed();
 	}
 
 	public void crawlPressed() {
-		// TODO: Fix this
-		if (jumpCount == 0) {
-			crawl();
-		}
+		state.crawlPressed();
 	}
 
 	public void crawlReleased() {
-		// TODO: Fix this
-		if (crawling) {
-			stopCrawling();
-		}
+		state.crawlReleased();
 	}
 
 	public void update() {
-		// TODO: Fix this
 		if (jumpCount > 0) {
 			float t = (System.currentTimeMillis() - jumpTime) / 1000.0f;
 			y = (int) (jumpY + JUMP_SPEED * t + 0.5f * Game.GRAVITY * t * t);
 			if (y <= 0) {
-				enterGround();
+				state.enterGround();
 			}
 		}
+	}
+
+	public void setState(State s) {
+		this.state = s;
 	}
 
 }
